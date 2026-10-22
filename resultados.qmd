@@ -1,0 +1,9 @@
+---
+title: "Resultados de la Encuesta"
+format:
+  html:
+    page-layout: full
+    
+execute:
+  echo: false
+---

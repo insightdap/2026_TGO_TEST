@@ -1,0 +1,58 @@
+---
+pagetitle: "Encuesta de Clima Laboral"
+format:
+  html:
+    page-layout: full
+    title-block-banner: false
+---
+
+```{r}
+#| label: setup
+#| include: false
+
+library(dplyr)
+library(bslib)
+library(bsicons)
+library(htmltools)
+
+source("scripts/actualizar_metricas.R")
+source("R/theme_tgo.R")
+
+global_total <- resultados_total |> filter(nivel == "global", modelo == "estandar") 
+dimension_total <- resultados_total |> filter(nivel == "dimension", modelo == "estandar") |> arrange(desc(pct_alto))
+
+fmt_pct <- function(x, digits = 1) paste0(format(round(x, digits), nsmall = digits), "%")
+```
+
+```{=html}
+<style>body { background-color: #252036; }</style>
+```
+
+::: {.tgo-hero .column-screen}
+
+<div class="tgo-hero-inner">
+
+<div class="tgo-hero-top">
+  <span class="tgo-hero-badge"><span class="tgo-hero-badge-icon">Q</span> ENCUESTA DE CLIMA LABORAL</span>
+  <span class="tgo-hero-badge">📊 `r fmt_pct(avance_global$pct_avance)` de avance</span>
+</div>
+
+<div class="tgo-hero-kicker">Seguimiento y resultados &middot; `r cliente` </div>
+<div class="tgo-hero-title">Portal de Inteligencia de Clima y Cultura Laboral</div>
+<div class="tgo-hero-subtitle">Plataforma analítica centralizada para el monitoreo en tiempo real, diagnóstico multidimensional y transformación de la experiencia del colaborador.</div>
+
+<div class="tgo-hero-divider"></div>
+
+<div class="tgo-hero-nav">
+<div class="tgo-hero-nav-item"><a href="avance.qmd"><span class="tgo-hero-nav-kicker" style="color:#fcbf2f;display:block;">Avance de encuestamiento </span><span class="tgo-hero-nav-label" style="display:block;">Monitorea dia a dia<br>como avanza tu encuesta.</span></a></div>
+<div class="tgo-hero-nav-item"><a href="resultados.qmd"><span class="tgo-hero-nav-kicker" style="color:#00acac;display:block;">Resultados</span><span class="tgo-hero-nav-label" style="display:block;">Nivel de satisfacción global<br>y multidimensional de tu encuesta.</span></a></div>
+<div class="tgo-hero-nav-item"><a href="metodologia.qmd"><span class="tgo-hero-nav-kicker" style="color:#c6c6c6;display:block;">Metodología</span><span class="tgo-hero-nav-label" style="display:block;">Conoce más de nuestra metodología.<br>Aprende a leer tus resultados.</span></a></div>
+</div>
+
+</div>
+
+<!-- <a href="#resumen" class="tgo-hero-scroll">&darr;</a> -->
+
+:::
+
+

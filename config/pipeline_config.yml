@@ -1,0 +1,33 @@
+# Configuración centralizada del pipeline de la encuesta de clima laboral.
+# Si cambian los IDs de las hojas o las reglas de negocio, se ajustan aquí
+# (no se deben hardcodear en los scripts).
+
+google_sheets:
+  respuestas_id: "10TK40bl0ewp7Qsx8n-NjWJDUnlK6BEVvDMSLWckqPTw"
+  base_personas_id: "1lKNz89yQCiG8Ro1bH-6DvJic89B-z6My2zm8J7xZd4w"
+  catalogos_id: "1DpALiBZIsE1c6GBOG8Dl3_BVdhJEwGWoqNzOqQVUSTY"
+
+auth:
+  service_account_file: "gs4_encuestas_serviceaccount_enc.json"
+  key_env_var: "GS4_ENCUESTAS_KEY"
+
+reglas_negocio:
+  min_n_grupo: 5        # tamaño mínimo de grupo para reportar resultados segmentados (incl. Excel)
+  moe_confianza: 0.95    # nivel de confianza para el margen de error de avance
+  moe_p: 0.5             # proporción conservadora para el margen de error
+  banda_alto: [4, 5]
+  banda_medio: [3]
+  banda_bajo: [1, 2]
+
+encuesta:
+  zona_horaria_offset_horas: 6   # se resta a "Submitted at" (UTC) para hora local (ESA)
+  fecha_cierre: null              # pendiente: fecha de cierre de la encuesta, si aplica
+
+# drive:
+  # Carpeta raiz de Drive compartida con la cuenta de servicio. Dentro de
+  # ella se autocrea una subcarpeta por cliente (cliente.nombre) donde
+  # scripts/actualizar_metricas.R sube cada corrida versionada por timestamp.
+  # backup_folder_id: "1vYoYRurAgufDs4BT3w-tDC1CQuQgz06Z"
+
+cliente:
+  nombre: "empresa_abc"   # usado en el nombre de archivo subido a Drive; minusculas, sin espacios

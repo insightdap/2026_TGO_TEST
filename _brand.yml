@@ -1,0 +1,32 @@
+meta:
+  name: TGO Insight - Encuesta de Clima Laboral
+
+color:
+  palette:
+    dark-navy: "#252036"
+    dark-teal: "#324f57"
+    teal: "#00acac"
+    gold: "#fcbf2f"
+    gray: "#c6c6c6"
+    dark-gray: "#424242"
+    semaforo-rojo: "#d73027"
+    semaforo-naranja: "#F49643"
+    semaforo-amarillo: "#C1C41B"
+    semaforo-verde: "#1a9850"
+  foreground: dark-navy
+  background: "#FFFFFF"
+  primary: teal
+  secondary: dark-teal
+  success: semaforo-verde
+  info: dark-teal
+  warning: gold
+  danger: semaforo-rojo
+  light: gray
+  dark: dark-navy
+
+typography:
+  base:
+    family: "Segoe UI"
+  headings:
+    family: "Segoe UI"
+    weight: 600

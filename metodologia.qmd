@@ -1,0 +1,22 @@
+---
+title: "Metodología"
+---
+
+
+## Reglas generales
+
+- **Escala de respuesta**: cada pregunta se responde en una escala de 1 a 5. Las respuestas vacías se excluyen del cálculo de porcentajes (no se tratan como "1").
+- **Bandas de favorabilidad**: 1-2 = bajo, 3 = medio, 4-5 = alto. La mayoría de los gráficos reportan el **% alto**.
+- **Promedios por dimensión/factor/global**: se calculan siempre a partir de las respuestas individuales que componen el grupo (no como promedio de promedios).
+- **Semáforo de color**: los puntos de corte se calibran con el promedio (`media_global`) y la desviación estándar (`sd_global`) del % alto de las **50 preguntas estándar** del modelo:
+
+  - Rojo: por debajo de `media_global - sd_global`
+  - Naranja: entre `media_global - sd_global` y `media_global`
+  - Amarillo: entre `media_global` y `media_global + sd_global`
+  - Verde: por encima de `media_global + sd_global`
+
+- **Tamaño mínimo de grupo**: los resultados segmentados (incluido el exportable de Excel) solo se muestran si el grupo tiene **5 o más** respuestas válidas.
+- **Margen de error** (dashboard de avance): se calcula con corrección por población finita, 95% de confianza y proporción conservadora (p = 0.5).
+- **Cobertura de segmentación en Avance**: género, jerarquía, tiempo laboral y edad solo se capturan al responder la encuesta, por lo que el avance solo puede expresarse como **conteo de respuestas** por esas variables (no como % del universo). El % de avance real sí puede calcularse por **país** y **área**, disponibles para el 100% de las personas invitadas.
+- **Exportable de Excel**: la matriz de preguntas × demográficos reporta únicamente el **% alto (4-5)**.
+

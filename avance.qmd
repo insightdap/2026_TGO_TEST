@@ -1,0 +1,276 @@
+---
+title: "Avance de la Encuesta"
+format:
+  html:
+    page-layout: full
+    
+execute:
+  echo: false
+---
+
+```{r}
+#| label: setup
+#| include: false
+
+library(dplyr)
+library(arrow)
+library(highcharter)
+library(reactable)
+library(reactablefmtr)
+library(bslib)
+library(bsicons)
+
+source("R/theme_tgo.R")
+source("scripts/actualizar_avance.R")
+
+fmt_pct <- function(x, digits = 1) paste0(format(round(x, digits), nsmall = digits), "%")
+```
+
+## Resumen
+
+
+```{r}
+#| label: kpis
+layout_column_wrap(
+  width = 1/4,
+  height = "165px",
+  value_box(
+    title = "Población total",
+    value = scales::comma(avance_global$invitados),
+    showcase = bsicons::bs_icon("people"),
+    theme = "primary"
+  ),
+  value_box(
+    title = "Respuestas recibidas",
+    value = scales::comma(avance_global$respuestas),
+    showcase = bsicons::bs_icon("clipboard-check"),
+    theme = "secondary"
+  ),
+  value_box(
+    title = "% de avance",
+    value = fmt_pct(avance_global$pct_avance),
+    showcase = bsicons::bs_icon("speedometer2"),
+    theme = "primary"
+  ),
+  value_box(
+    title = "Margen de error (95%CL)",
+    value = paste0("± ", fmt_pct(avance_global$margen_error)),
+    showcase = bsicons::bs_icon("rulers"),
+    theme = "secondary"
+  )
+)
+```
+
+
+## Tendencia diaria de respuestas
+
+```{r}
+#| label: avance-diario
+
+card(
+  full_screen = TRUE,
+  card_body(
+    highchart() |>
+      hc_add_theme(hc_theme_tgo()) |>
+      hc_chart(zoomType = "x") |>
+      hc_xAxis(categories = format(avance_diario$dia, "%d-%b")) |>
+      hc_yAxis_multiples(
+        list(title = list(text = "Respuestas del día")),
+        list(title = list(text = "Respuestas acumuladas"), opposite = TRUE)
+      ) |>
+      hc_add_series(
+        name = "Respuestas del día", type = "column", yAxis = 0,
+        data = avance_diario$respuestas_dia, color = tgo_colors[["gold"]],
+        dataLabels = list(enabled = TRUE)
+      ) |>
+      hc_add_series(
+        name = "Acumulado", type = "line", yAxis = 1,
+        data = avance_diario$respuestas_acum, color = tgo_colors[["navy"]], marker = list(enabled = FALSE)
+      ) |>
+      hc_title(text = "Respuestas diarias y acumuladas") |>
+      hc_tooltip(shared = TRUE) |> 
+      hc_exporting(enabled = TRUE)
+  )
+)
+  
+  
+```
+
+## Respuestas por demografía
+
+Revisa como avanza el encuestamiento a través de la variable demográfica de tu interés. 
+
+
+```{r}
+#| label: tabs-demo-calculos
+#| results: asis
+#| include: false
+
+# segmentos_demo <- c(
+#   dem_genero = "Género", dem_jerarquia = "Nivel jerárquico",
+#   dem_tiempo_laboral = "Antigüedad", dem_edad = "Edad"
+# )
+# 
+# tabs <- lapply(names(segmentos_demo), function(seg) {
+#   datos <- avance_conteo_demo |> filter(segmento == seg)
+#   niveles <- niveles_demo(seg, datos$grupo)
+#   datos$grupo <- factor(datos$grupo, levels = niveles)
+#   datos <- datos |> arrange(grupo)
+# 
+#   hc <- highchart() |>
+#     hc_add_theme(hc_theme_tgo()) |>
+#     hc_xAxis(categories = as.character(datos$grupo)) |>
+#     hc_yAxis(title = list(text = "Respuestas")) |>
+#     hc_add_series(name = "Respuestas", data = datos$respuestas, type = "bar", showInLegend = FALSE,
+#                    color = tgo_colors[["teal"]]) |>
+#     hc_title(text = paste("Respuestas por", segmentos_demo[[seg]]))
+# 
+#   nav_panel(title = segmentos_demo[[seg]], hc)
+# })
+
+# navset_card_tab(!!!tabs)
+
+contador_demo_genero <- layout_column_wrap(
+  width = NULL,
+  style = css(grid_template_columns = "1fr 2fr"),
+  height = 410,
+  card(
+    full_screen = TRUE,
+    card_body(
+      avance_conteo_demo %>%
+        filter(segmento == "dem_genero") |> 
+        mutate(grupo = factor(grupo,levels = niveles_demo$nivel[niveles_demo$segmento=="dem_genero"])) |> 
+        hchart(type="pie",hcaes(x=grupo,y=respuestas),name="Género") %>% 
+        hc_title(text="Respuestas por Género")%>%
+        hc_plotOptions(pie=list(
+          innerSize="55%",
+          tooltip=list(pointFormat="{point.y:,.0f} ({point.percentage:.0f}%)"),
+          dataLabels=list(enabled=TRUE,
+                          format="{point.name}</br>{point.y:,.0f} ({point.percentage:.0f}%)"))
+          )%>%
+        hc_yAxis(title=list(text=""))%>%
+        hc_xAxis(title=list(text=""))%>%
+        hc_add_theme(hc_theme_tgo()) %>% 
+        hc_exporting(enabled=TRUE)
+  )),
+  card(
+    full_screen = TRUE,
+    card_body(
+     avance_diario_demo %>%
+       filter(segmento == "dem_genero") |> 
+       mutate(grupo = factor(grupo,levels = niveles_demo$nivel[niveles_demo$segmento=="dem_genero"])) |> 
+       mutate(time = dia %>% datetime_to_timestamp()) %>% 
+      hchart("spline", hcaes(x = time, y = respuestas_dia, group = grupo)) %>%
+      hc_title(text = "Respuestas por Género") %>%
+      hc_subtitle(text = "Tendencia diaria") %>% 
+      hc_xAxis(type = "datetime", labels = list(format = "{value:%d-%b}"), title = list(text = "")) %>% 
+      hc_yAxis(title = list(text = "Cantidad de Respuestas")) %>%
+      hc_plotOptions(spline = list(
+        lineWidth = 2,
+        states = list(hover = list(lineWidth = 5)), #resalta la linea al pasar el mouse
+        marker = list(enabled = FALSE),
+        dataLabels=list(enabled=TRUE, format="<span style='color:{series.color}'>{point.y:.0f}</span>"))
+        ) %>% 
+      hc_add_theme(hc_theme_tgo()) %>% 
+      hc_exporting(enabled = TRUE)
+  ))
+)
+
+contador_demo_jerarquia <- layout_column_wrap(
+  width = NULL,
+  style = css(grid_template_columns = "1fr 2fr"),
+  height = 410,
+  card(
+    full_screen = TRUE,
+    card_body(
+      avance_conteo_demo %>%
+        filter(segmento == "dem_jerarquia") |> 
+        mutate(grupo = factor(grupo,levels = niveles_demo$nivel[niveles_demo$segmento=="dem_jerarquia"])) |> 
+        hchart(type="pie",hcaes(x=grupo,y=respuestas),name="Género") %>% 
+        hc_title(text="Respuestas por Nivel Jerárquico")%>%
+        hc_plotOptions(pie=list(
+          innerSize="55%",
+          tooltip=list(pointFormat="{point.y:,.0f} ({point.percentage:.0f}%)"),
+          dataLabels=list(enabled=TRUE,
+                          format="{point.name}</br>{point.y:,.0f} ({point.percentage:.0f}%)"))
+          )%>%
+        hc_yAxis(title=list(text=""))%>%
+        hc_xAxis(title=list(text=""))%>%
+        hc_add_theme(hc_theme_tgo()) %>% 
+        hc_exporting(enabled=TRUE)
+  )),
+  card(
+    full_screen = TRUE,
+    card_body(
+     avance_diario_demo %>%
+       filter(segmento == "dem_jerarquia") |> 
+       mutate(grupo = factor(grupo,levels = niveles_demo$nivel[niveles_demo$segmento=="dem_jerarquia"])) |> 
+       mutate(time = dia %>% datetime_to_timestamp()) %>% 
+      hchart("spline", hcaes(x = time, y = respuestas_dia, group = grupo)) %>%
+      hc_title(text = "Respuestas por Nivel Jerárquico") %>%
+      hc_subtitle(text = "Tendencia diaria") %>% 
+      hc_xAxis(type = "datetime", labels = list(format = "{value:%d-%b}"), title = list(text = "")) %>% 
+      hc_yAxis(title = list(text = "Cantidad de Respuestas")) %>%
+      hc_plotOptions(spline = list(
+        lineWidth = 2,
+        states = list(hover = list(lineWidth = 5)), #resalta la linea al pasar el mouse
+        marker = list(enabled = FALSE),
+        dataLabels=list(enabled=TRUE, format="<span style='color:{series.color}'>{point.y:.0f}</span>"))
+        ) %>% 
+      hc_add_theme(hc_theme_tgo()) %>% 
+      hc_exporting(enabled = TRUE)
+  ))
+)
+
+```
+
+
+```{r}
+#| label: tabs-demo
+
+navset_card_pill(
+  full_screen = TRUE,
+  title = "Respuestas por Demografía",
+  nav_menu(title = "Seleccionar demográfico",
+    nav_panel(title = "Género",
+            contador_demo_genero),
+    nav_panel(title = "Nivel Jerárquico",
+            contador_demo_jerarquia)
+))
+
+
+```
+
+
+
+## Avance real por país y área
+
+A diferencia de las variables anteriores, país y área están disponibles para el **100% de las personas invitadas**, por lo que aquí sí se puede calcular el % de avance real y su margen de error.
+
+```{r}
+#| label: tabla-base-personas
+#| eval: false
+
+
+tabla_avance_base <- avance_base_personas |>
+  mutate(segmento = recode(segmento, pais = "País", area_1 = "Área")) |>
+  select(Segmento = segmento, Grupo = grupo, Invitados = invitados, Respuestas = respuestas,
+         `% Avance` = pct_avance, `Margen de error` = margen_error)
+
+reactable(
+  tabla_avance_base,
+  groupBy = "Segmento",
+  columns = list(
+    `% Avance` = colDef(
+      cell = data_bars(
+        tabla_avance_base, fill_color = tgo_colors[["teal"]],
+        background = "#F0F0F0", text_position = "outside-end",
+        number_fmt = scales::label_number(accuracy = 0.1, suffix = "%")
+      )
+    ),
+    `Margen de error` = colDef(format = colFormat(digits = 1, suffix = "%"))
+  ),
+  defaultExpanded = TRUE,
+  searchable = TRUE
+)
+```

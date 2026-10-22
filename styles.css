@@ -1,0 +1,213 @@
+/* Ajustes complementarios a _brand.yml para dar una apariencia de tablero consistente */
+
+.navbar {
+  background-color: #252036 !important;
+}
+.navbar-brand, .navbar-nav .nav-link {
+  color: #ffffff !important;
+}
+.navbar-nav .nav-link:hover {
+  color: #00acac !important;
+}
+
+.card {
+  border: 1px solid #c6c6c6;
+  border-radius: 0.5rem;
+  box-shadow: none;
+}
+
+.bslib-card .bslib-navs-card-title {
+  background: linear-gradient(90deg,#252036,#00acac) !important;
+  color: #ffffff;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  font-size: 16px;
+}
+
+.card-body {
+  padding-top: 3px !important;
+  padding-bottom: 3px !important;
+}
+
+.tab-content.html-fill-item.html-fill-container {
+  margin-bottom: 0 !important;
+}
+/* Boton de menu a la derecha */
+.nav-pills {
+  justify-content: flex-end;
+}
+
+/* Boton de menu */
+.nav-pills>li.active>a {
+    color: #252036;
+    background-color: #FFFFFF; 
+    padding: 0.5rem 1rem;
+    border-radius: 3px;
+    text-decoration: none;
+}
+
+/* estilo menu */
+.dropdown-menu {
+  background-color: rgba(255, 255, 255, 0.30);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+/* sombra de seleccion del menu */
+.dropdown-menu > li > a:hover {
+  background-color: #252036;
+  color: #ffffff;
+}
+
+/* estilo cuando el menu esta activo */
+.dropdown-menu > li > a.active {
+  background-color: #252036;
+  color: #ffffff;
+}
+
+.dropdown-item, .dropdown-menu>li>a {
+    display: block;
+    width: 100%;
+    padding: 0.25rem 1rem;
+    text-align: center;
+    text-decoration: none;
+}
+
+.value-box {
+  border-radius: 0.5rem;
+}
+
+h1, h2, h3 {
+  color: #252036;
+}
+
+.quarto-title-banner {
+  background-color: #252036;
+}
+
+/* --- Hero de portada (index.qmd) ------------------------------------- */
+.tgo-hero {
+  background-color: #252036;
+  border-radius: 0;
+  padding: 1.5625rem 2.5rem 3rem;
+  color: #ffffff;
+  position: relative;
+  margin-bottom: 2.5rem;
+}
+
+.tgo-hero-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.tgo-hero-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 3rem;
+}
+
+.tgo-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 999px;
+  padding: 0.4rem 0.9rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #c6c6c6;
+}
+
+.tgo-hero-badge-icon {
+  width: 1.4rem;
+  height: 1.4rem;
+  border-radius: 0.35rem;
+  background: #00acac;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: #252036;
+  font-size: 0.8rem;
+}
+
+.tgo-hero-kicker {
+  color: #00acac;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+  font-size: 0.8rem;
+  margin-bottom: 0.75rem;
+}
+
+.tgo-hero-title {
+  font-size: clamp(1.9rem, 4vw, 2.9rem);
+  font-weight: 800;
+  line-height: 1.15;
+  margin-bottom: 1rem;
+  max-width: 42rem;
+}
+
+.tgo-hero-subtitle {
+  color: #c6c6c6;
+  max-width: 38rem;
+  font-size: 1.05rem;
+  margin-bottom: 2.5rem;
+}
+
+.tgo-hero-divider {
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  margin-bottom: 1.5rem;
+}
+
+.tgo-hero-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  padding-bottom: 0.5rem;
+}
+
+.tgo-hero-nav-item a {
+  text-decoration: none;
+  display: block;
+}
+
+.tgo-hero-nav-kicker {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.3rem;
+}
+
+.tgo-hero-nav-label {
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 0.92rem;
+}
+
+.tgo-hero-scroll {
+  position: absolute;
+  left: 50%;
+  bottom: -1.25rem;
+  transform: translateX(-50%);
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  color: #252036;
+  font-size: 1.1rem;
+  text-decoration: none;
+}
+
+.nav-footer {
+  font-weight: bold;
+}

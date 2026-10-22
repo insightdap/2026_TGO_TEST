@@ -1,0 +1,41 @@
+project:
+  type: website
+  execute-dir: project
+
+website:
+  title: ""
+  
+  page-footer:
+    left: "Desarrollado por [Insight Data Analitycs Partners](https://insightdap.com/)."
+    right: "&copy; Copyright 2026"
+    background: "#00acac"
+  
+  navbar:
+    logo: "imag/tgo_logo.png" 
+    left:
+      - href: index.qmd
+        text: Inicio
+      - href: avance.qmd
+        text: Avance
+      - href: resultados.qmd
+        text: Resultados
+      - href: metodologia.qmd
+        text: Metodología
+
+format:
+  html:
+    theme:
+      - united
+      - brand
+    css: styles.css
+    toc: false
+    toc-location: body
+    toc-title: "Contenido"
+    page-layout: full
+
+editor: visual
+
+execute:
+  echo: false
+  warning: false
+  message: false
