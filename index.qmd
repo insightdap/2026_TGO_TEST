@@ -15,7 +15,7 @@ library(bslib)
 library(bsicons)
 library(htmltools)
 
-source("scripts/actualizar_metricas.R")
+source("scripts/actualizar_avance.R")
 source("R/theme_tgo.R")
 
 global_total <- resultados_total |> filter(nivel == "global", modelo == "estandar") 
