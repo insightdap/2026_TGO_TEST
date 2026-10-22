@@ -18,8 +18,8 @@ library(htmltools)
 source("scripts/actualizar_avance.R")
 source("R/theme_tgo.R")
 
-global_total <- resultados_total |> filter(nivel == "global", modelo == "estandar") 
-dimension_total <- resultados_total |> filter(nivel == "dimension", modelo == "estandar") |> arrange(desc(pct_alto))
+# global_total <- resultados_total |> filter(nivel == "global", modelo == "estandar") 
+# dimension_total <- resultados_total |> filter(nivel == "dimension", modelo == "estandar") |> arrange(desc(pct_alto))
 
 fmt_pct <- function(x, digits = 1) paste0(format(round(x, digits), nsmall = digits), "%")
 ```
